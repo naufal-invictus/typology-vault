@@ -1,0 +1,50 @@
+{% extends "vault/base.html" %}
+
+{% block title %}Contact - Typology Vault{% endblock %}
+
+{% block content %}
+<div class=" text-white py-12">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row items-center justify-center md:justify-start space-y-6 md:space-y-0 md:space-x-12">
+            <div class="w-48 h-48 rounded-full overflow-hidden shadow-lg">
+                <img src="https://i.ibb.co.com/Kxp3bc2Y/GRlu4-V5b-MAAAk1-M.jpg" alt="Profile Picture" class="w-full h-full object-cover object-center">
+            </div>
+            <div>
+                <h1 class="text-3xl font-bold mb-4">Contact Me</h1>
+                <table class="table-auto w-full">
+                    <tbody>
+                        <tr>
+                            <td class="font-bold pr-4">Name:</td>
+                            <td>{{ contact_info.name }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-4">Email:</td>
+                            <td><a href="mailto:{{ contact_info.email }}" class="text-blue-400 hover:underline">{{ contact_info.email }}</a></td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-4">Phone:</td>
+                            <td>{{ contact_info.phone }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-4">Quora:</td>
+                            <td><a href="{{ contact_info.quora }}" target="_blank" class="text-blue-400 hover:underline">Naufal 285</a></td>
+                        </tr>
+                        <tr>
+                             <td class="font-bold pr-4">Facebook:</td>
+                            <td><a href="{{ contact_info.facebook }}" target="_blank" class="text-blue-400 hover:underline">Naufal Kebab</a></td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-4">Bio:</td>
+                            <td>Do white</td>
+                        </tr>
+                         <tr>
+                            <td class="font-bold pr-4">MBTI:</td>
+                            <td>ISFJ - 125</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

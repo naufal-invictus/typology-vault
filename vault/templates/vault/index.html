@@ -1,0 +1,390 @@
+{% load vault_extras %}
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Typology Vault</title>
+    <link rel="icon" href="https://i.ibb.co.com/tTLS2T7r/Whats-App-Image-2025-04-27-at-18-55-59.jpg" type="image/x-icon">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .custom-font {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .file-extension-tag {
+            /* Tailwind blue-500, warnanya kece badai, bikin file extension makin ngejreng desu~ */
+            color: white;
+            font-size: 0.525rem;
+            /* text-xs, kecil tapi tetep manis~ */
+            font-weight: 600;
+            padding: 0.100rem 0.100rem;
+            border-radius: 0.375rem;
+            /* rounded, biar sudutnya imut-imut */
+            display: inline-block;
+            margin-top: 0.25rem;
+        }
+
+        .tag-badge {
+            background-color: #2563eb;
+            /* Tailwind blue-600, biar tag nya makin ngepop dan catchy~ */
+            color: white;
+            font-size: 0.525rem;
+            font-weight: 600;
+            padding: 0.100rem 0.100rem;
+            border-radius: 0.375rem;
+            margin-right: 0.25rem;
+            display: inline-block;
+        }
+
+        .uploader-badge {
+            background-color: #10b981;
+            /* Tailwind green-500, uploader nya dapet badge kece badai~ */
+            color: white;
+            font-size: 0.525rem;
+            font-weight: 600;
+            padding: 0.100rem 0.100rem;
+            border-radius: 0.375rem;
+            margin-right: 0.25rem;
+            display: inline-block;
+            margin-top: 0.25rem;
+        }
+
+        .filter-button.active {
+            background-color: #2563eb;
+            /* Tailwind blue-600, tombol filter yang lagi aktif, biar keliatan centil~ */
+            color: white;
+        }
+
+        footer {
+            background-color: var(--color-midnight);
+            color: var(--color-starlight);
+            padding: 1rem 2rem;
+            text-align: center;
+            font-size: 0.875rem;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.7);
+            flex-shrink: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        footer a {
+            color: var(--color-aurora-green);
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 1rem;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white min-h-screen custom-font">
+
+    <!-- Navbar kece badai, siap nemenin jalan-jalan di web ini~ -->
+    <nav class="bg-gray-900 shadow-lg">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl font-bold">Typology Vault</a>
+            <div class="hidden md:flex space-x-6">
+                <a href="/" class="hover:text-blue-400">Home</a>
+                <a href="/about" class="hover:text-blue-400">About</a>
+                <a href="/contact" class="hover:text-blue-400">Contact</a>
+            </div>
+            <!-- Tombol menu mobile yang imut-imut, tinggal pencet buat buka tutup menu nya~ -->
+            <div class="md:hidden">
+                <button id="nav-toggle" aria-label="Toggle navigation" class="focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <!-- Menu mobile yang tersembunyi, cuma muncul kalo tombol di atas dipencet, kawaii~ -->
+        <div id="nav-menu" class="hidden md:hidden bg-gray-800 px-4 py-2">
+            <a href="/" class="block py-2 hover:text-blue-400">Home</a>
+            <a href="/about" class="block py-2 hover:text-blue-400">About</a>
+            <a href="/contact" class="block py-2 hover:text-blue-400">Contact</a>
+        </div>
+    </nav>
+    <!-- Heading Typology Vault yang kece, siap sambut para pengunjung dengan gaya wibu alay~ -->
+    <div class="text-center my-8">
+        <h1 class="text-4xl md:text-5xl font-bold text-blue-400 mb-2 tracking-tight">Explore the Vault</h1>
+    <p class="text-gray-400 text-sm md:text-base">Dive into a curated collection of typology resources.</p>
+</div>
+
+<!-- Search Box -->
+<div class="flex justify-center mb-6">
+    <input
+        type="text"
+        id="searchInput"
+        placeholder="Search titles or tags..."
+        class="w-[90vw] md:w-1/2 px-4 py-2 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        onkeyup="searchPDFs()"
+    >
+</div>
+    <!-- Folder Menu -->
+    <div class="container mx-auto px-4 py-6">
+        <!-- Desktop filter buttons -->
+        <div class="hidden md:flex flex-wrap gap-4 justify-center">
+            <button onclick="filterPDFs('all', this)"
+                class="filter-button bg-gray-700 hover:bg-blue-600 px-4 py-2 rounded-lg text-sm active">All</button>
+            <button onclick="filterPDFs('mbti', this)"
+                class="filter-button bg-gray-700 hover:bg-blue-600 px-4 py-2 rounded-lg text-sm">MBTI</button>
+            <button onclick="filterPDFs('enneagram', this)"
+                class="filter-button bg-gray-700 hover:bg-blue-600 px-4 py-2 rounded-lg text-sm">Enneagram</button>
+            <button onclick="filterPDFs('socionics', this)"
+                class="filter-button bg-gray-700 hover:bg-blue-600 px-4 py-2 rounded-lg text-sm">Socionics</button>
+            <button onclick="filterPDFs('tempraments', this)"
+                class="filter-button bg-gray-700 hover:bg-blue-600 px-4 py-2 rounded-lg text-sm">Tempraments</button>
+            <button onclick="filterPDFs('psychosophy', this)"
+                class="filter-button bg-gray-700 hover:bg-blue-600 px-4 py-2 rounded-lg text-sm">Psychosophy</button>
+            <button onclick="filterPDFs('big five', this)"
+                class="filter-button bg-gray-700 hover:bg-blue-600 px-4 py-2 rounded-lg text-sm">Big Five</button>
+            <button onclick="filterPDFs('disc', this)"
+                class="filter-button bg-gray-700 hover:bg-blue-600 px-4 py-2 rounded-lg text-sm">DISC</button>
+            <button onclick="filterPDFs('astrology', this)"
+                class="filter-button bg-gray-700 hover:bg-blue-600 px-4 py-2 rounded-lg text-sm">Astrology</button>
+            <button onclick="filterPDFs('other', this)"
+                class="filter-button bg-gray-700 hover:bg-blue-600 px-4 py-2 rounded-lg text-sm">Other</button>
+            {% if user.is_superuser %}
+            <button onclick="createNewFolder()" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg text-sm">+
+                New Folder</button>
+            {% endif %}
+        </div>
+        <!-- Mobile filter dropdown -->
+        <div class="md:hidden relative">
+            <button id="filter-toggle"
+                class="bg-gray-700 hover:bg-blue-600 px-4 py-2 rounded-lg text-sm w-full text-left flex justify-between items-center">
+                Filter
+                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button>
+            <div id="filter-menu"
+                class="hidden absolute z-10 bg-gray-800 w-full mt-1 rounded-lg shadow-lg max-h-60 overflow-auto">
+                <button onclick="filterPDFs('all', this)"
+                    class="block w-full text-left px-4 py-2 hover:bg-blue-600 active">All</button>
+                <button onclick="filterPDFs('mbti', this)"
+                    class="block w-full text-left px-4 py-2 hover:bg-blue-600">MBTI</button>
+                <button onclick="filterPDFs('enneagram', this)"
+                    class="block w-full text-left px-4 py-2 hover:bg-blue-600">Enneagram</button>
+                <button onclick="filterPDFs('socionics', this)"
+                    class="block w-full text-left px-4 py-2 hover:bg-blue-600">Socionics</button>
+                <button onclick="filterPDFs('tempraments', this)"
+                    class="block w-full text-left px-4 py-2 hover:bg-blue-600">Tempraments</button>
+                <button onclick="filterPDFs('psychosophy', this)"
+                    class="block w-full text-left px-4 py-2 hover:bg-blue-600">Psychosophy</button>
+                <button onclick="filterPDFs('big five', this)"
+                    class="block w-full text-left px-4 py-2 hover:bg-blue-600">Big Five</button>
+                <button onclick="filterPDFs('disc', this)"
+                    class="block w-full text-left px-4 py-2 hover:bg-blue-600">DISC</button>
+                <button onclick="filterPDFs('astrology', this)"
+                    class="block w-full text-left px-4 py-2 hover:bg-blue-600">Astrology</button>
+                <button onclick="filterPDFs('other', this)"
+                    class="block w-full text-left px-4 py-2 hover:bg-blue-600">Other</button>
+                {% if user.is_superuser %}
+                <button onclick="createNewFolder()" class="block w-full text-left px-4 py-2 hover:bg-green-600">+ New
+                    Folder</button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+<!-- View Mode Switch -->
+<div class="flex justify-end mb-4 container mx-auto px-4">
+    <button onclick="setViewMode('grid')" id="gridViewBtn" class="bg-blue-600 text-white px-3 py-1 rounded-l-md text-sm">Grid</button>
+    <button onclick="setViewMode('list')" id="listViewBtn" class="bg-gray-600 text-white px-3 py-1 rounded-r-md text-sm">List</button>
+</div>
+
+<div class="container mx-auto px-4 py-6">
+    <!-- GRID view -->
+    <div id="pdfGrid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        {% for pdf in pdfs %}
+        <div class="bg-gray-800 p-4 rounded-xl shadow-md hover:shadow-xl transition hover:scale-105 duration-300 flex flex-col justify-between"
+             style="height: calc(20rem * 1.15);" 
+             data-tag="{% for tag in pdf.tags.all %}{{ tag.name|lower }} {% endfor %}">
+
+            {% if pdf.is_image %}
+            <img src="{{ pdf.file.url }}" alt="Thumbnail" class="w-full h-24 object-cover rounded-lg mb-3">
+            {% elif pdf.is_pdf_or_doc %}
+            <img src="https://i.ibb.co.com/tTLS2T7r/Whats-App-Image-2025-04-27-at-18-55-59.jpg" alt="Thumbnail"
+                class="w-full h-24 object-cover rounded-lg mb-3">
+            {% else %}
+            <img src="https://via.placeholder.com/150?text=No+Thumbnail" alt="Thumbnail"
+                class="w-full h-24 object-cover rounded-lg mb-3">
+            {% endif %}
+
+            <h2 class="text-sm font-semibold break-words mb-1" title="{{ pdf.title }}">{{ pdf.title }}</h2>
+
+            <span class="uploader-badge text-xs mb-2">Uploader: {{ pdf.uploader_name }}</span>
+
+            <div class="flex flex-wrap gap-1 text-xs text-blue-400 mb-2 overflow-y-auto max-h-20">
+                {% for tag in pdf.tags.all %}
+                <span class="tag-badge whitespace-nowrap">#{{ tag.name }}</span>
+                {% endfor %}
+            </div>
+
+            <span class="file-extension-tag text-xs mb-3">{{ pdf.file_extension }}</span>
+
+            <div class="flex justify-between text-xs mt-auto pt-2">
+                <a href="{{ pdf.file.url }}" class="text-blue-400 hover:underline">View</a>
+                <a href="{{ pdf.file.url }}" download class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded">Download</a>
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- LIST view -->
+<div id="pdfList" class="hidden overflow-x-auto">
+    <table class="min-w-full text-sm text-left text-gray-400">
+        <thead class="bg-gray-700 text-gray-300">
+            <tr>
+                <th class="px-4 py-2">Title</th>
+                <th class="px-4 py-2">Tags</th>
+                <th class="px-4 py-2">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pdf in pdfs %}
+            <tr class="border-b border-gray-700">
+                <td class="px-4 py-2">
+                    {{ pdf.title }}
+                </td>
+
+                <td class="px-4 py-2">
+                    {% for tag in pdf.tags.all %}
+                        <span class="tag-badge whitespace-nowrap">#{{ tag.name }}</span>
+                    {% empty %}
+                        <span class="text-gray-500">No tags</span>
+                    {% endfor %}
+                </td>
+                <td class="px-4 py-2 space-x-2">
+                    <a href="{{ pdf.file.url }}" download class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs">Download</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+</div>
+
+</div>
+
+
+
+
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-center text-gray-300 border-t border-gray-200">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <div class="text-sm">
+                &copy; 2025 Typology Vault. All rights reserved.
+            </div>
+            <div class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4">
+                <div>
+                    <a href="/about#contributors"
+                        class="bg-green-500 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline text-sm">Open
+                        for Contributions</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS Filter and Menu Toggle -->
+    <script>
+        function filterPDFs(tag, button) {
+            const pdfItems = document.querySelectorAll('#pdfGrid > div');
+            pdfItems.forEach(item => {
+                if (tag === 'all' || item.dataset.tag.includes(tag)) {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+            const filterMenu = document.getElementById('filter-menu');
+            if (filterMenu && !filterMenu.classList.contains('hidden')) {
+                filterMenu.classList.add('hidden');
+            }
+            const buttons = document.querySelectorAll('.filter-button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            if (button) {
+                button.classList.add('active');
+            }
+        }
+
+        document.getElementById('nav-toggle').addEventListener('click', function () {
+            const navMenu = document.getElementById('nav-menu');
+            if (navMenu.classList.contains('hidden')) {
+                navMenu.classList.remove('hidden');
+            } else {
+                navMenu.classList.add('hidden');
+            }
+        });
+
+        document.getElementById('filter-toggle').addEventListener('click', function () {
+            const filterMenu = document.getElementById('filter-menu');
+            if (filterMenu.classList.contains('hidden')) {
+                filterMenu.classList.remove('hidden');
+            } else {
+                filterMenu.classList.add('hidden');
+            }
+        });
+
+        function createNewFolder() {
+            alert('Feature coming soon! (Admin only)');
+        }
+        function searchPDFs() {
+        const input = document.getElementById('searchInput').value.toLowerCase();
+        const pdfItems = document.querySelectorAll('#pdfGrid > div');
+
+        pdfItems.forEach(item => {
+            const title = item.querySelector('h2').textContent.toLowerCase();
+            const tags = item.dataset.tag.toLowerCase();
+
+            if (title.includes(input) || tags.includes(input)) {
+                item.classList.remove('hidden');
+            } else {
+                item.classList.add('hidden');
+            }
+        });
+    }let currentView = 'grid'; // default grid
+
+function setViewMode(mode) {
+    const grid = document.getElementById('pdfGrid');
+    const list = document.getElementById('pdfList');
+    const gridBtn = document.getElementById('gridViewBtn');
+    const listBtn = document.getElementById('listViewBtn');
+
+    if (mode === 'list') {
+        grid.classList.add('hidden');
+        list.classList.remove('hidden');
+        listBtn.classList.add('bg-blue-600');
+        gridBtn.classList.remove('bg-blue-600');
+    } else {
+        list.classList.add('hidden');
+        grid.classList.remove('hidden');
+        gridBtn.classList.add('bg-blue-600');
+        listBtn.classList.remove('bg-blue-600');
+    }
+
+    currentView = mode;
+}
+
+    </script>
+
+</body>
+
+</html>

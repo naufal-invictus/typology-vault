@@ -1,0 +1,190 @@
+{% load static tailwind_tags %}
+
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="https://i.ibb.co.com/tTLS2T7r/Whats-App-Image-2025-04-27-at-18-55-59.jpg" type="image/x-icon">
+
+    <title>{% block title %}Typology Vault{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Tema gelap celestial yang kece badai, siap bikin mata meleleh desu~ */
+        :root {
+            --color-midnight: #0b0c10;
+            --color-starlight: #c5c6c7;
+            --color-nebula-purple: #6f42c1;
+            --color-aurora-green: #2ecc71;
+            --color-cosmic-blue: #2980b9;
+            --color-meteor-red: #e74c3c;
+            --color-galaxy-pink: #ff6f91;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--color-midnight), #1a1a2e, #16213e);
+            color: var(--color-starlight);
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        nav {
+            background-color: var(--color-midnight);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.7);
+        }
+
+        nav a {
+            color: var(--color-starlight);
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--color-aurora-green);
+        }
+
+
+        /* Container responsif yang kece, biar layoutnya tetep cakep di semua layar~ */
+        .container {
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            flex: 1 0 auto;
+        }
+
+        /* Kotak file yang imut-imut, siap dipencet-pencet sama user kawaii~ */
+        #pdfGrid > div {
+            width: 140px;
+            padding: 0.5rem;
+            border-radius: 0.75rem;
+            background-color: #1f2833;
+            box-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #pdfGrid > div:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(46, 204, 113, 0.8);
+        }
+
+        #pdfGrid img {
+            width: 100%;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        #pdfGrid h2 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 0.25rem;
+        }
+
+        #pdfGrid p {
+            font-size: 0.75rem;
+            color: var(--color-aurora-green);
+            margin-bottom: 0.25rem;
+        }
+
+        #pdfGrid .flex.justify-between.text-xs {
+            font-size: 0.7rem;
+        }
+
+        #pdfGrid a {
+            color: var(--color-cosmic-blue);
+            text-decoration: none;
+        }
+
+        #pdfGrid a:hover {
+            text-decoration: underline;
+        }
+
+        /* Penyesuaian responsif biar tetep kece di layar kecil desu~ */
+        @media (max-width: 768px) {
+            #pdfGrid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            #pdfGrid > div {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #pdfGrid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar kece badai, siap nemenin jalan-jalan di web ini~ -->
+<nav class="bg-gray-900 shadow-lg">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+        <a href="/" class="text-2xl font-bold text-white">Typology Vault</a>
+        <div class="hidden md:flex space-x-6">
+            <a href="/" class="hover:text-blue-400">Home</a>
+            <a href="/about" class="hover:text-blue-400">About</a>
+            <a href="/contact" class="hover:text-blue-400">Contact</a>
+        </div>
+        <!-- Tombol menu mobile yang imut-imut, tinggal pencet buat buka tutup menu nya~ -->
+        <div class="md:hidden">
+            <button id="nav-toggle" aria-label="Toggle navigation" class="focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="6" x2="21" y2="6" />
+                    <line x1="3" y1="12" x2="21" y2="12" />
+                    <line x1="3" y1="18" x2="21" y2="18" />
+                </svg>
+            </button>
+        </div>
+    </div>
+    <!-- Menu mobile yang tersembunyi, cuma muncul kalo tombol di atas dipencet, kawaii~ -->
+    <div id="nav-menu" class="hidden md:hidden bg-gray-800 px-4 py-2">
+        <a href="/" class="block py-2 hover:text-blue-400">Home</a>
+        <a href="/about" class="block py-2 hover:text-blue-400">About</a>
+        <a href="/contact" class="block py-2 hover:text-blue-400">Contact</a>
+    </div>
+</nav>
+
+<!-- Konten utama yang kece, tempat semua konten web muncul desu~ -->
+<div class="container py-6">
+    {% block content %}
+    {% endblock %}
+</div>
+
+<!-- Footer yang manis, ngasih info copyright dan link kontribusi, desu nyaaa~ -->
+<footer class="bg-gray-800 py-6 text-center text-gray-300 border-t border-gray-200">
+    <div class="container mx-auto flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+        <div class="text-sm">
+            &copy; 2025 Typology Vault. All rights reserved.
+        </div>
+        <div class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4">
+            <div>
+                <a href="/about#contributors" class="bg-green-500 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline text-sm">Open for Contributions</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
+<script>
+    document.getElementById('nav-toggle').addEventListener('click', function() {
+    const navMenu = document.getElementById('nav-menu');
+    if (navMenu.classList.contains('hidden')) {
+        navMenu.classList.remove('hidden');
+    } else {
+        navMenu.classList.add('hidden');
+    }
+});
+</script>
